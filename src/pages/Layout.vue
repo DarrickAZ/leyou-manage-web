@@ -50,6 +50,7 @@
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
+    <!--顶部工具栏-->
     <v-toolbar
       app
       dark
@@ -84,6 +85,7 @@
         <v-icon>account_box</v-icon>
       </v-btn>
     </v-toolbar>
+    <!--中间内容-->
     <v-content>
           <v-breadcrumbs>
             <v-icon slot="divider">chevron_right</v-icon>
