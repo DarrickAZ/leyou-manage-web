@@ -63,31 +63,48 @@
       }
     },
     watch: {
-      oldBrand:{
-        deep:true,
-        handler(val){
-          Object.deepCopy(val,this.brand);
-        }
+      oldBrand: {// 监控oldBrand的变化
+        handler(val) {
+          if (val) {
+            // 注意不要直接复制，否则这边的修改会影响到父组件的数据，copy属性即可
+            this.brand = Object.deepCopy(val)
+          } else {
+            // 为空，初始化brand
+            this.brand = {
+              name: '',
+              letter: '',
+              image: '',
+              categories: [],
+            }
+          }
+        },
+        deep: true
       }
     },
     methods: {
       submit() {
         // 表单校验
         if (this.$refs.myBrandForm.validate()) {
-          this.brand.categories = this.brand.categories.map(c => c.id);
-          this.brand.letter = this.brand.letter.toUpperCase();
+          // 定义一个请求参数对象，通过解构表达式来获取brand中的属性
+          const {categories, letter, ...params} = this.brand;
+          // 数据库中只要保存分类的id即可，因此我们对categories的值进行处理,只保留id，并转为字符串
+          params.cids = categories.map(c => c.id).join(",");
+          // 将字母都处理为大写
+          params.letter = letter.toUpperCase();
           // 将数据提交到后台
+          // this.$http.post('/item/brand', this.$qs.stringify(params))
           this.$http({
             method: this.isEdit ? 'put' : 'post',
             url: '/item/brand',
-            data: this.$qs.stringify(this.brand)
+            data: this.$qs.stringify(params)
           }).then(() => {
             // 关闭窗口
+            this.$emit("close");
             this.$message.success("保存成功！");
-            this.closeWindow();
-          }).catch(() => {
-            this.$message.error("保存失败！");
-          });
+          })
+            .catch(() => {
+              this.$message.error("保存失败！");
+            });
         }
       },
       clear() {
