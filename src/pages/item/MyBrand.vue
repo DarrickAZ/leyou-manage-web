@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title flat color="white">
-      <v-btn color="primary">新增</v-btn>
+      <v-btn color="primary" @click="addBrand">新增品牌</v-btn>
       <!--空间隔离组件-->
       <v-spacer />
       <!--搜索框，与search属性关联-->
@@ -31,6 +31,21 @@
         </td>
       </template>
     </v-data-table>
+
+    <!--弹出的对话框-->
+    <v-dialog max-width="500" v-model="show" persistent>
+      <v-card>
+        <!--对话框的标题-->
+        <v-toolbar dense dark color="primary">
+          <v-toolbar-title>新增品牌</v-toolbar-title>
+        </v-toolbar>
+        <!--对话框的内容，表单-->
+        <v-card-text class="px-5">
+          我是表单
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
   </v-card>
 </template>
 
@@ -50,7 +65,8 @@
           {text: 'LOGO', align: 'center', value: 'image', sortable: false},
           {text: '首字母', align: 'center', value: 'letter'},
           {text: '操作', align: 'center', value: 'id', sortable: false}
-        ]
+        ],
+        show:false,//用于控制dialog的显示
       }
     },
     watch: {
@@ -82,6 +98,10 @@
           this.brands = resp.data.items; // 品牌数据
           this.loading = false; // 加载完成
         });
+      },
+      addBrand(){
+        // 控制弹窗可见：
+        this.show = true;
       }
     },
     // 渲染后执行
