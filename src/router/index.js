@@ -16,17 +16,17 @@ function route (path, file, name, children) {
 
 export default new Router({
   routes: [
-    route("/login",'/Login',"Login"),// /login路径，路由到登录组件
+    route("/login",'/Login',"Login"),
     {
-      path:"/", // 根路径，路由到 Layout组件
+      path:"/",
       component: () => import('../pages/Layout'),
       redirect:"/index/dashboard",
-      children:[ // 其它所有组件都是 Layout的子组件
+      children:[
         route("/index/dashboard","/Dashboard","Dashboard"),
         route("/item/category",'/item/Category',"Category"),
         route("/item/brand",'/item/Brand',"Brand"),
         route("/item/list",'/item/Goods',"Goods"),
-        route("/item/specification",'/item/specification/Specification',"Specification"),
+        route("/item/specification",'/item/Specification',"Specification"),
         route("/user/statistics",'/item/Statistics',"Statistics"),
         route("/trade/promotion",'/trade/Promotion',"Promotion")
       ]
